@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Endjin.Snowflake.Host</name>
+    </assembly>
+    <members>
+        <member name="T:Endjin.Snowflake.Host.Initializer">
+            <summary>
+            A class responsible for initializing the function host environment.
+            </summary>
+        </member>
+        <member name="M:Endjin.Snowflake.Host.Initializer.Initialize(Microsoft.Azure.WebJobs.ExecutionContext)">
+            <summary>
+            Initializes the function host environment.
+            </summary>
+            <param name="context">The function's <see cref="T:Microsoft.Azure.WebJobs.ExecutionContext"/>.</param>
+            <returns>An initialized <see cref="F:Endjin.Snowflake.Host.Initializer.serviceProvider"/>.</returns>
+        </member>
+        <member name="T:Endjin.Snowflake.Host.Load">
+            <summary>
+            The function class that implements the load HTTP operation.
+            </summary>
+        </member>
+        <member name="M:Endjin.Snowflake.Host.Load.Run(System.Net.Http.HttpRequestMessage,Microsoft.Extensions.Logging.ILogger,Microsoft.Azure.WebJobs.ExecutionContext)">
+            <summary>
+            The function's run method.
+            </summary>
+            <param name="req">The request to process.</param>
+            <param name="logger">A logger instance.</param>
+            <param name="context">The function's execution context.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation including the HTTP response message.</returns>
+        </member>
+        <member name="T:Endjin.Snowflake.Host.OpenApi">
+            <summary>
+            The function class that returns the OpenApi definition.
+            </summary>
+        </member>
+        <member name="M:Endjin.Snowflake.Host.OpenApi.Run(Microsoft.AspNetCore.Http.HttpRequest,System.String,System.String,Microsoft.Azure.WebJobs.ExecutionContext)">
+            <summary>
+            The function's run method.
+            </summary>
+            <param name="req">The request to process.</param>
+            <param name="version">The version of the OpenApi definition.</param>
+            <param name="extension">The extension.</param>
+            <param name="context">The function's <see cref="T:Microsoft.Azure.WebJobs.ExecutionContext"/>.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation including the HTTP response message.</returns>
+        </member>
+        <member name="T:Endjin.Snowflake.Host.Unload">
+            <summary>
+            The function class that implements the unload HTTP operation.
+            </summary>
+        </member>
+        <member name="M:Endjin.Snowflake.Host.Unload.Run(System.Net.Http.HttpRequestMessage,Microsoft.Extensions.Logging.ILogger,Microsoft.Azure.WebJobs.ExecutionContext)">
+            <summary>
+            The function's run method.
+            </summary>
+            <param name="req">The request to process.</param>
+            <param name="logger">A logger instance.</param>
+            <param name="context">The function's execution context.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> representing the asynchronous operation including the HTTP response message.</returns>
+        </member>
+    </members>
+</doc>

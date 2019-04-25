@@ -1,0 +1,60 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dataFactoryName": {
+      "type": "string"
+    },    
+    "snowflakeConnectorFunctionUrl": {
+      "type": "string"
+    },
+    "snowflakeConnectorFunctionKey": {
+      "type": "securestring"
+    },
+    "_artifactsLocation": {
+      "type": "string"
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring"
+    }
+  },
+  "variables": {
+    "tenantId": "[subscription().tenantID]"
+  },
+  "resources": [
+    {
+		  "name": "[parameters('dataFactoryName')]",
+		  "apiVersion": "2018-06-01",
+		  "type": "Microsoft.DataFactory/factories",
+		  "location": "[resourceGroup().location]",
+		  "identity": {
+			  "type": "SystemAssigned"
+		  }
+    },
+    {
+      "name": "pipeline",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2018-02-01",
+      "properties": {
+          "mode": "incremental",
+          "templateLink": {
+              "uri": "[concat(parameters('_artifactsLocation'), '/linkedTemplates/ArmTemplate_0.json', parameters('_artifactsLocationSasToken'))]",
+              "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+              "factoryName": {
+                  "value": "[parameters('dataFactoryName')]"
+              },
+              "SnowflakeConnector_functionUrl": {
+                  "value": "[parameters('snowflakeConnectorFunctionUrl')]"
+              },
+              "SnowflakeConnector_functionKey": {
+                  "value": "[parameters('snowflakeConnectorFunctionKey')]"
+              }
+          }
+      },
+      "dependsOn": [
+        "[parameters('dataFactoryName')]"]
+      }
+  ]
+}

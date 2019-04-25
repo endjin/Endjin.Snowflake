@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.438
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Endjin.Snowflake", "Endjin.Snowflake\Endjin.Snowflake.csproj", "{F82026C0-563D-49CE-9150-2B1CBAD91F72}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Endjin.Snowflake.Host", "Endjin.Snowflake.Host\Endjin.Snowflake.Host.csproj", "{D35FE028-4822-4D70-973A-DC0796A748B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Endjin.Snowflake.Abstractions", "Endjin.Snowflake.Abstractions\Endjin.Snowflake.Abstractions.csproj", "{BE128868-4D2A-40C3-8594-5A0BFC7625DE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Endjin.Snowflake.Demo", "Endjin.Snowflake.Demo\Endjin.Snowflake.Demo.csproj", "{0297ECD4-1B68-4DAF-8B0A-29DD8263611F}"
+EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Endjin.Snowflake.Deployment", "Endjin.Snowflake.Deployment\Endjin.Snowflake.Deployment.deployproj", "{F71B8300-C2C9-455A-8FDD-B6CEA66F7A02}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{AEB83B04-0128-494B-84DB-AA4DCDFBB522}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
+EndProject
+Project("{151D2E53-A2C4-4D7D-83FE-D05416EBD58E}") = "Endjin.Snowflake.Demo.Deployment", "Endjin.Snowflake.Demo.Deployment\Endjin.Snowflake.Demo.Deployment.deployproj", "{7A0682A0-FAB5-4573-B4F0-C6836015FAAE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F82026C0-563D-49CE-9150-2B1CBAD91F72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F82026C0-563D-49CE-9150-2B1CBAD91F72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F82026C0-563D-49CE-9150-2B1CBAD91F72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F82026C0-563D-49CE-9150-2B1CBAD91F72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D35FE028-4822-4D70-973A-DC0796A748B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D35FE028-4822-4D70-973A-DC0796A748B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D35FE028-4822-4D70-973A-DC0796A748B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D35FE028-4822-4D70-973A-DC0796A748B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE128868-4D2A-40C3-8594-5A0BFC7625DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE128868-4D2A-40C3-8594-5A0BFC7625DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE128868-4D2A-40C3-8594-5A0BFC7625DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE128868-4D2A-40C3-8594-5A0BFC7625DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0297ECD4-1B68-4DAF-8B0A-29DD8263611F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0297ECD4-1B68-4DAF-8B0A-29DD8263611F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0297ECD4-1B68-4DAF-8B0A-29DD8263611F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0297ECD4-1B68-4DAF-8B0A-29DD8263611F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F71B8300-C2C9-455A-8FDD-B6CEA66F7A02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F71B8300-C2C9-455A-8FDD-B6CEA66F7A02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F71B8300-C2C9-455A-8FDD-B6CEA66F7A02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F71B8300-C2C9-455A-8FDD-B6CEA66F7A02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A0682A0-FAB5-4573-B4F0-C6836015FAAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A0682A0-FAB5-4573-B4F0-C6836015FAAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A0682A0-FAB5-4573-B4F0-C6836015FAAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A0682A0-FAB5-4573-B4F0-C6836015FAAE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8C46A651-FDFD-444B-9084-859C6C771F79}
+	EndGlobalSection
+EndGlobal

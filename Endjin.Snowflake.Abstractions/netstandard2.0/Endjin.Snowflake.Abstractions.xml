@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Endjin.Snowflake.Abstractions</name>
+    </assembly>
+    <members>
+        <member name="T:Endjin.Snowflake.Commands.LoadCommand">
+            <summary>
+            A class representing a command to load Snowflake from a given stage.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.LoadCommand.Database">
+            <summary>
+            Gets or sets the name of the database context to apply to the command.
+            When not specified the stage and target table must be fully qualified.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.LoadCommand.Schema">
+            <summary>
+            Gets or sets the schema context to apply to the load command.
+            When not specified the stage and target table must be schema qualified.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.LoadCommand.Warehouse">
+            <summary>
+            Gets or sets the name of the data warehouse that the command will run against.
+            If the data warehouse is not supplied then the warehouse will be determined by the connection string used to execute the command.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.LoadCommand.Stage">
+            <summary>
+            Gets or sets the name of the Snowflake stage that contains the data to load.
+            The stage is typically an Azure or AWS external stage.
+            </summary>
+            <remarks>
+            The stage must already exist within the Snowflake account.
+            If <see cref="P:Endjin.Snowflake.Commands.LoadCommand.Database"/> and <see cref="P:Endjin.Snowflake.Commands.LoadCommand.Schema"/> are omitted then stage should be fully qualified.
+            </remarks>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.LoadCommand.TargetTable">
+            <summary>
+            Gets or sets the name of the target table in the Snowflake account that data will be loaded into.
+            If <see cref="P:Endjin.Snowflake.Commands.LoadCommand.Database"/> and <see cref="P:Endjin.Snowflake.Commands.LoadCommand.Schema"/> are omitted then the target table should be fully qualified.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.LoadCommand.Files">
+            <summary>
+            Gets or sets a collection of files or file paths to include during the load operation.
+            When not specified then the contents of the stage will be loaded.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.LoadCommand.Force">
+            <summary>
+            Gets or sets a value indicating whether Snowflake should load all files even if they have
+            already been previously loaded.
+            </summary>
+        </member>
+        <member name="M:Endjin.Snowflake.Commands.LoadCommand.Validate(System.String@)">
+            <summary>
+            Validates the command returning true if the command is valid.
+            </summary>
+            <param name="message">Validation error message if the command is not valid, otherwise null.</param>
+            <returns>True if the command is valid.</returns>
+        </member>
+        <member name="T:Endjin.Snowflake.Commands.UnloadCommand">
+            <summary>
+            A class representing a command to unload data from Snowflake into a stage.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.UnloadCommand.Database">
+            <summary>
+            Gets or sets the name of the database context to apply to the command.
+            When not specified the stage and target table must be fully qualified.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.UnloadCommand.Schema">
+            <summary>
+            Gets or sets the schema context to apply to the load command.
+            When not specified the stage and target table must be schema qualified.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.UnloadCommand.Warehouse">
+            <summary>
+            Gets or sets the name of the data warehouse that the command will run against.
+            If the data warehouse is not supplied then the warehouse will be determined by the connection string used to execute the command.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.UnloadCommand.Stage">
+            <summary>
+            Gets or sets the name of the Snowflake stage that data should be unloaded to.
+            The stage is typically an Azure or AWS external stage.
+            </summary>
+            <remarks>
+            The stage must already exist within the Snowflake account.
+            If <see cref="P:Endjin.Snowflake.Commands.UnloadCommand.Database"/> and <see cref="P:Endjin.Snowflake.Commands.UnloadCommand.Schema"/> are omitted then stage should be fully qualified.
+            </remarks>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.UnloadCommand.Query">
+            <summary>
+            Gets or sets a query to generate the results to unload.
+            If <see cref="P:Endjin.Snowflake.Commands.UnloadCommand.Database"/> and <see cref="P:Endjin.Snowflake.Commands.UnloadCommand.Schema"/> are omitted then the objects referenced in the query should be fully qualified.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.UnloadCommand.FilePrefix">
+            <summary>
+            Gets or sets a file prefix for the resulting files.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.UnloadCommand.SingleFile">
+            <summary>
+            Gets or sets a value indicating whether Snowflake should generate a single file or multiple files.
+            </summary>
+        </member>
+        <member name="P:Endjin.Snowflake.Commands.UnloadCommand.Overwrite">
+            <summary>
+            Gets or sets a value indicating whether Snowflake should overwrite existing files if they already exist in the stage.
+            </summary>
+        </member>
+        <member name="M:Endjin.Snowflake.Commands.UnloadCommand.Validate(System.String@)">
+            <summary>
+            Validates the command returning true if the command is valid.
+            </summary>
+            <param name="message">Validation error message if the command is not valid, otherwise null.</param>
+            <returns>True if the command is valid.</returns>
+        </member>
+    </members>
+</doc>

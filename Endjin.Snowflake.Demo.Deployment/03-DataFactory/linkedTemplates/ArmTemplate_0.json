@@ -1,0 +1,142 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "factoryName": {
+            "type": "string",
+            "metadata": "Data Factory Name",
+            "defaultValue": "snowflakeconnector"
+        },
+         "SnowflakeConnector_functionUrl": {
+            "type": "secureString",
+            "metadata": "Url of the function app"
+        },
+        "SnowflakeConnector_functionKey": {
+            "type": "secureString",
+            "metadata": "Secure string for 'functionKey' of 'SnowflakeConnector'"
+        }
+    },
+    "variables": {
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('factoryName'), '/SnowflakeConnector')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureFunction",
+                "typeProperties": {
+                    "functionAppUrl": "[parameters('SnowflakeConnector_functionUrl')]",
+                    "functionKey": {
+                        "type": "SecureString",
+                        "value": "[parameters('SnowflakeConnector_functionKey')]"
+                    }
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "name": "[concat(parameters('factoryName'), '/ADF_SnowflakePipeline')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "LoadLineItems",
+                        "type": "AzureFunctionActivity",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "functionName": "v1/load",
+                            "method": "POST",
+                            "headers": {},
+                            "body": {
+                                "database": "@{pipeline().parameters.database}",
+                                "schema": "sales",
+                                "stage": "azure_adf_stage",
+                                "targetTable": "LINEITEM",
+                                "files": [
+                                    "@{pipeline().parameters.inputPath}"
+                                ],
+                                "warehouse": "@{pipeline().parameters.warehouse}"
+                            }
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "SnowflakeConnector",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "UnloadSupplierAggregates",
+                        "type": "AzureFunctionActivity",
+                        "dependsOn": [
+                            {
+                                "activity": "LoadLineItems",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "functionName": "v1/unload",
+                            "method": "POST",
+                            "headers": {},
+                            "body": {
+                                "database": "@{pipeline().parameters.database}",
+                                "schema": "sales",
+                                "stage": "azure_adf_stage",
+                                "query": "select * from SupplierAgg",
+                                "filePrefix": "@{pipeline().parameters.outputPath}",
+                                "overwrite": true,
+                                "warehouse": "@{pipeline().parameters.warehouse}"
+                            }
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "SnowflakeConnector",
+                            "type": "LinkedServiceReference"
+                        }
+                    }
+                ],
+                "parameters": {
+                    "inputPath": {
+                        "type": "String",
+                        "defaultValue": "input/input.csv"
+                    },
+                    "outputPath": {
+                        "type": "String",
+                        "defaultValue": "output/output.csv.gzip"
+                    },
+                    "database": {
+                        "type": "String",
+                        "defaultValue": "ADF_DB"
+                    },
+                    "warehouse": {
+                        "type": "String",
+                        "defaultValue": "DEMO_WH"
+                    }
+                },
+                "annotations": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/SnowflakeConnector')]"
+            ]
+        }
+    ]
+}

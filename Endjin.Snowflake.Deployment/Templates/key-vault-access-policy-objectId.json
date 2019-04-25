@@ -1,0 +1,41 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "keyVaultName": {
+      "type": "string"
+    },
+    "objectId": {
+      "type": "string",
+      "metadata": {
+        "description": "The object id to give permission"
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "metadata": {
+        "description": "Access policies for the vault."
+      }
+    }
+  },
+  "variables": {
+    "tenantId": "[subscription().tenantID]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "name": "[concat(parameters('keyVaultName'), '/add')]",
+      "apiVersion": "2016-10-01",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[variables('tenantId')]",
+            "objectId": "[parameters('objectId')]",
+            "permissions": "[parameters('permissions')]"
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {}
+}

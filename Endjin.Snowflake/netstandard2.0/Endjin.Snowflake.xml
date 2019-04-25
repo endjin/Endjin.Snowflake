@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Endjin.Snowflake</name>
+    </assembly>
+    <members>
+        <member name="T:Endjin.Snowflake.SnowflakeClient">
+            <summary>
+            A client for submitting queries to Snowflake.
+            </summary>
+        </member>
+        <member name="M:Endjin.Snowflake.SnowflakeClient.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Endjin.Snowflake.SnowflakeClient"/> class.
+            </summary>
+            <param name="connectionString">The Snowflake connection string to use.</param>
+        </member>
+        <member name="M:Endjin.Snowflake.SnowflakeClient.ExecuteNonQuery(System.String[])">
+            <summary>
+            Executes a sequence of Snowflake statements that are not expected to return a result set.
+            </summary>
+            <param name="statements">The query statements to execute.</param>
+            <returns>The number of rows affected. When more than one statement is supplied the method will return the number of rows affected for the last statement only.</returns>
+        </member>
+        <member name="T:Endjin.Snowflake.SnowflakeClientExtensions">
+            <summary>
+            A set of extension methods for executing Snowflake commands.
+            </summary>
+        </member>
+        <member name="M:Endjin.Snowflake.SnowflakeClientExtensions.Load(Endjin.Snowflake.SnowflakeClient,System.String,System.String,System.String[],System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Instructs Snowflake to load data from a stage into a target table.
+            </summary>
+            <param name="client">
+            The <see cref="T:Endjin.Snowflake.SnowflakeClient"/>.
+            </param>
+            <param name="stage">
+            The name of the Snowflake stage that contains the data to load.
+            The stage is typically an Azure or AWS external stage.
+            If <paramref name="database"/> and <paramref name="schema"/> are omitted then the stage name should be fully qualified.
+            </param>
+            <param name="targetTable">
+            The name of the target table.
+            If <paramref name="database"/> and <paramref name="schema"/> are omitted then the target table should be fully qualified.
+            </param>
+            <param name="files">
+            The collection of files or file paths to include during the load operation.
+            When not specified then the contents of the stage will be loaded.</param>
+            <param name="warehouse">
+            The name of the data warehouse that the command will run against.
+            If the data warehouse is not supplied then the warehouse will be determined by the connection string used to execute the command.
+            </param>
+            <param name="database">
+            The name of the database context to apply to the command.
+            When not specified the stage and target table must be fully qualified.
+            </param>
+            <param name="schema">
+            The schema context to apply to the load command.
+            When not specified the stage and target table must be schema qualified.
+            </param>
+            <param name="force">
+            A value indicating whether Snowflake should load all files even if they have
+            already been previously loaded.
+            </param>
+            <returns>The number of rows affected.</returns>
+        </member>
+        <member name="M:Endjin.Snowflake.SnowflakeClientExtensions.Unload(Endjin.Snowflake.SnowflakeClient,System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Instructs Snowflake to unload data from a query into a stage.
+            </summary>
+            <param name="client">
+            The <see cref="T:Endjin.Snowflake.SnowflakeClient"/>.
+            </param>
+            <param name="stage">
+            The name of the Snowflake stage that contains the data to load.
+            The stage is typically an Azure or AWS external stage.
+            If <paramref name="database"/> and <paramref name="schema"/> are omitted then the stage name should be fully qualified.
+            </param>
+            <param name="query">
+            A query to generate the results to unload.
+            If <paramref name="database"/> and <paramref name="schema"/> are omitted then the objects referenced in the query should be fully qualified.
+            </param>
+            <param name="filePrefix">
+            A file prefix for the resulting files.
+            </param>
+            <param name="warehouse">
+            The name of the data warehouse that the command will run against.
+            If the data warehouse is not supplied then the warehouse will be determined by the connection string used to execute the command.
+            </param>
+            <param name="database">
+            The name of the database context to apply to the command.
+            When not specified the stage and target table must be fully qualified.
+            </param>
+            <param name="schema">
+            The schema context to apply to the load command.
+            When not specified the stage and target table must be schema qualified.
+            </param>
+            <param name="singleFile">
+            a value indicating whether Snowflake should generate a single file or multiple files.
+            </param>
+            <param name="overwrite">
+            A value indicating whether Snowflake should overwrite existing files if they already exist in the stage.
+            </param>
+        </member>
+    </members>
+</doc>

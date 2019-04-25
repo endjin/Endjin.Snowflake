@@ -1,0 +1,245 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appInsightsName": {
+      "type": "string"
+    },
+    "keyVaultName": {
+      "type": "string"
+    },
+    "storageName": {
+      "type": "string"
+    },    
+    "functionsAppName": {
+      "type": "string"
+    },
+    "snowflakeConnectionString":  {
+      "type":  "securestring"
+    },
+    "_artifactsLocation": {
+      "type": "string"
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring"
+    }
+  },
+  "variables": {
+    "tenantId": "[subscription().tenantID]",
+    "storageConnectionStringSecretName": "StorageConnectionString",
+    "snowflakeConnectionStringSecretName": "SnowflakeConnectionString"
+  },
+  "resources": [
+    {
+      "name": "key-vault",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/key-vault.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "tenantId": {
+            "value": "[variables('tenantId')]"
+          },
+          "keyVaultName": {
+            "value": "[parameters('keyVaultName')]"
+          },
+          "diagnosticsStorageAccountName": {
+            "value": "[parameters('storageName')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "app-insights",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/app-insights.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appName": {
+            "value": "[parameters('appInsightsName')]"
+          },
+          "appType": {
+            "value": "other"
+          },
+          "appLocation": {
+            "value": "[resourceGroup().location]"
+          }
+        }
+      }
+    },
+    {
+      "name": "storage",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/storage.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "storageAccountName": {
+            "value": "[parameters('storageName')]"
+          },
+          "storageAccountType": {
+            "value": "Standard_LRS"
+          }
+        }
+      }
+    },
+    {
+      "name": "functions-app",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/functions-app.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "functionsAppName": {
+            "value": "[parameters('functionsAppName')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "functions-app-key-vault-access",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [
+        "functions-app",
+        "key-vault"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/key-vault-access-policy-objectId.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "keyVaultName": {
+            "value": "[parameters('keyVaultName')]"
+          },
+          "objectId": {
+            "value": "[reference('functions-app').outputs.principalId.value]"
+          },
+          "permissions": {
+            "value": {
+              "secrets": [
+                "get"
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "storage-connection-string-secret",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [
+        "storage",
+        "key-vault"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/key-vault-secret.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "secretName": {
+            "value": "[variables('storageConnectionStringSecretName')]"
+          },
+          "keyVaultName": {
+            "value": "[parameters('keyVaultName')]"
+          },
+          "contentValue": {
+            "value": "[reference('storage').outputs.storageAccountConnectionString.value]"
+          }
+        }
+      }
+    },
+    {
+      "name": "snowflake-connection-string-secret",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2016-09-01",
+      "dependsOn": [
+        "key-vault"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), '/Templates/key-vault-secret.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "secretName": {
+            "value": "[variables('snowflakeConnectionStringSecretName')]"
+          },
+          "keyVaultName": {
+            "value": "[parameters('keyVaultName')]"
+          },
+          "contentValue": {
+            "value": "[parameters('snowflakeConnectionString')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "[concat(parameters('functionsAppName'),'/appsettings')]",
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2015-08-01",
+      "dependsOn": [
+        "functions-app-key-vault-access",
+        "storage-connection-string-secret",
+        "snowflake-connection-string-secret"        
+      ],
+      "tags": {
+        "displayName": "functions-app-settings"
+      },
+      "properties": {
+        "AzureWebJobsStorage": "[concat('@Microsoft.KeyVault(SecretUri=', reference('storage-connection-string-secret').outputs.secretUriWithVersion.value, ')')]",
+        "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[concat('@Microsoft.KeyVault(SecretUri=', reference('storage-connection-string-secret').outputs.secretUriWithVersion.value, ')')]",
+        "WEBSITE_CONTENTSHARE": "[toLower(parameters('functionsAppName'))]",
+        "FUNCTIONS_EXTENSION_VERSION": "~2",
+        "ConnectionString": "[concat('@Microsoft.KeyVault(SecretUri=', reference('snowflake-connection-string-secret').outputs.secretUriWithVersion.value, ')')]",
+        "WEBSITE_ENABLE_SYNC_UPDATE_SITE": "true",
+        "ApplicationInsights:InstrumentationKey": "[reference('app-insights').outputs.instrumentationKey.value]"
+      }
+    }
+  ],
+  "outputs": {
+    "appInsightsName": {
+      "type": "string",
+      "value": "[parameters('appInsightsName')]"
+    },
+    "appInsightsApplicationId": {
+      "type": "string",
+      "value": "[reference('app-insights').outputs.appId.value]"
+    },
+    "appInsightsInstrumentationKey": {
+      "type": "string",
+      "value": "[reference('app-insights').outputs.instrumentationKey.value]"
+    },
+    "functionsAppName": {
+      "type": "string",
+      "value": "[parameters('functionsAppName')]"
+    }
+  }
+}

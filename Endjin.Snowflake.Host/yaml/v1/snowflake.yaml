@@ -1,0 +1,81 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://localhost:7071/api'
+info:
+  description: Endjin Snowflake API
+  version: "1.0.0.0"
+  title: Snowflake API
+  termsOfService: 'https://endjin.com/snowflake/terms/'
+  contact:
+    email: snowflake@endjin.com
+paths:
+  /v1/load:
+    post:
+      summary:  Loads data from a Snowflake stage into a target table
+      description: Loads data from a Snowflake stage into a target table
+      operationId: load
+      tags:
+        - Snowflake
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoadCommand'
+        description: The new data source request
+      responses:
+        '200':
+          description: successful operation
+        '400':
+          description: Invalid request
+security:
+  - ApiKeyAuth: [] 
+components:
+  schemas:
+    LoadCommand:
+      properties:
+        database:
+          nullable: true
+          type: string
+          description: >-
+            The name of the database context to apply to the command.
+            When not specified the stage and target table must be fully qualified.
+        schema:
+          nullable: true
+          type: string
+          description: >-
+            The name of the data warehouse that the command will run against.
+            If the data warehouse is not supplied then the warehouse will be determined by the connection string used to execute the command.
+        warehouse:
+          type: string
+          nullable: true
+          description: >-
+            The data warehouse that the command will run against.
+            If the data warehouse is not supplied then the warehouse will be determined by the connection string used to execute the command.
+        stage:
+          type: string
+          description: >-
+            The name of the Snowflake stage that contains the data to load.
+            The stage is typically an Azure or AWS external stage.
+        targetTable:
+          type: string
+          description: >-
+            The name of the target table in the Snowflake account that data will be loaded into.
+            If database and schema propertoes are omitted then the target table should be fully qualified.
+        files:
+          type: array
+          items:
+            type: string
+          description: >-
+            A collection of files or file paths to include during the load operation.
+            When not specified then the contents of the stage will be loaded.
+        force:
+          type: boolean
+          nullable: true
+          description: >-
+             A value indicating whether Snowflake should load all files even if they have
+              already been previously loaded.
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-functions-key

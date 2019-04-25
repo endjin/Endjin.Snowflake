@@ -86,7 +86,7 @@ POST v1/load
     "schema": "SALES",
     "stage": "azure_adf_stage",
     "query": "select * from SupplierAgg",
-    "filePrefix": "/output/Supplier.csv",
+    "filePrefix": "/output/Supplier.csv.gzip",
     "singleFile": true,
     "overwrite": true
 }
